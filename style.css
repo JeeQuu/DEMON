@@ -30,7 +30,7 @@
             left: 0;
             width: 100%;
             text-align: center;
-            z-index: 2;
+            z-index: 3;
         }
 
         .logo img {
@@ -67,7 +67,7 @@
 
         .social-links {
             position: absolute;
-            bottom: 5%;
+            bottom: 10%;
             left: 0;
             width: 100%;
             display: flex;
