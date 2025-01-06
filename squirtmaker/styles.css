@@ -1,0 +1,691 @@
+:root {
+    --piggy-pink: #ff9ec6;
+    --piggy-pink-dark: #ff7eb3;
+    --piggy-yellow: #ffd75e;
+    --piggy-yellow-dark: #ffc82e;
+    --text: #333333;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    color: var(--text);
+}
+
+.container {
+    max-width: 512px;
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+}
+
+.preview-container {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px var(--shadow);
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+}
+
+.preview-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* Remove specific canvas layering styles */
+#preview-canvas {
+    position: absolute;
+    z-index: 1;
+}
+
+/* Add styles for PIXI canvas */
+.preview-container canvas:not(#preview-canvas) {
+    z-index: 2;
+    pointer-events: none;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Modern Input Styling */
+input[type="text"], 
+input[type="number"] {
+    padding: 8px 12px;
+    border: 2px solid var(--piggy-pink);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--piggy-pink-dark);
+    box-shadow: 0 0 0 3px rgba(255, 158, 198, 0.2);
+}
+
+/* Modern Range Slider */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    margin: 5px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--piggy-pink);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--piggy-pink-dark);
+    transform: scale(1.1);
+}
+
+/* Button Styling */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--piggy-pink);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+button:hover {
+    background: var(--piggy-pink-dark);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button.active {
+    background: var(--piggy-yellow);
+    color: var(--text);
+}
+
+/* Control Groups */
+.control-group {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.speed-controls,
+.transform-controls,
+.animation-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.speed-controls button {
+    background: var(--piggy-yellow);
+    color: var(--text);
+}
+
+.speed-controls button:hover {
+    background: var(--piggy-yellow-dark);
+}
+
+/* Labels and Info Text */
+label {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 5px;
+    display: block;
+}
+
+.upload-controls {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.upload-section {
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+/* Export Dialog */
+.export-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px var(--shadow);
+    z-index: 1000;
+    min-width: 300px;
+}
+
+.export-dialog h3 {
+    margin-top: 0;
+    color: var(--text);
+}
+
+.quality-settings {
+    margin: 20px 0;
+}
+
+.size-warning {
+    color: #ff4444;
+    font-weight: 500;
+}
+
+/* Loading Dialog */
+.loading {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 32px var(--shadow) !important;
+    border-radius: 16px !important;
+}
+
+/* File Input Styling */
+input[type="file"] {
+    padding: 10px;
+    border: 2px dashed var(--piggy-pink);
+    border-radius: 8px;
+    width: calc(100% - 24px);
+    cursor: pointer;
+}
+
+input[type="file"]:hover {
+    border-color: var(--piggy-pink-dark);
+    background: rgba(255, 158, 198, 0.05);
+}
+
+/* Value Displays */
+#zoom-value,
+#crop-x-value,
+#crop-y-value,
+#speed-info,
+#duration-display {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .controls {
+        gap: 15px;
+    }
+    
+    button {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
+
+/* Hide sticker name input - we'll use a default value */
+#sticker-name {
+    display: none;
+}
+
+/* Add some breathing room at the bottom for iOS */
+@supports (-webkit-touch-callout: none) {
+    body {
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+}
+
+/* Add this to your existing styles */
+.main-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.main-controls button {
+    flex: 1;
+    max-width: 200px;
+}
+
+.loop-controls {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Sliders container */
+.sliders-group {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    -webkit-appearance: none;
+}
+
+/* Group transform controls together */
+.transform-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: none;
+    padding: 0;
+}
+
+/* Style all slider containers consistently */
+.zoom-controls,
+.zoom-animation-controls,
+.position-controls,
+.loop-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Style all slider value displays consistently */
+#zoom-value,
+#zoom-animation-value,
+#crop-x-value,
+#crop-y-value,
+#loop-count-value,
+#duration-display {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Consistent styling for all range inputs */
+input[type="range"].styled-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    margin: 10px 0;
+    padding: 0;
+}
+
+/* Add margin to position-controls sliders for better grouping */
+.position-controls input[type="range"].styled-slider {
+    margin-bottom: 8px;
+}
+
+/* Remove margin from last position slider */
+.position-controls input[type="range"].styled-slider:last-of-type {
+    margin-bottom: 0;
+}
+
+.video-background {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    background: #000; /* Fallback color */
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    -webkit-transform: translate(-50%, -50%);
+    -webkit-object-fit: cover;
+}
+
+/* Add support for older iOS versions */
+@supports (-webkit-touch-callout: none) {
+    .video-background video {
+        position: fixed;
+    }
+}
+
+.error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    z-index: 1000;
+}
+
+.error-message button {
+    margin-top: 10px;
+    background: var(--piggy-pink);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.error-message button:hover {
+    background: var(--piggy-pink-dark);
+}
+
+/* Add styles for mirror buttons */
+.mirror-x-btn.active,
+.mirror-y-btn.active {
+    background: var(--piggy-yellow);
+    color: var(--text);
+}
+
+.mirror-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.mirror-controls button {
+    flex: 1;
+}
+
+.zoom-animation-controls {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#zoom-animation-value {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+}
+
+/* Update slider controls styling */
+.zoom-controls,
+.zoom-animation-controls,
+.crop-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+/* Make all sliders consistent */
+input[type="range"].styled-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+/* Consistent thumb styling */
+input[type="range"].styled-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--piggy-pink);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    margin-top: -7px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Consistent track styling */
+input[type="range"].styled-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--piggy-pink) var(--slider-progress, 0%), #eee var(--slider-progress, 0%));
+}
+
+/* Value displays */
+#zoom-value,
+#zoom-animation-value,
+#crop-x-value,
+#crop-y-value {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 2px;
+}
+
+/* Control group spacing */
+.transform-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+}
+
+/* Update button groups styling */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.action-buttons button {
+    flex: 1;
+    min-width: 0;
+    padding: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.speed-buttons {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.speed-buttons button {
+    flex: 1;
+    background: var(--piggy-yellow);
+    color: var(--text);
+    padding: 8px;
+}
+
+.speed-buttons #speed-info {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+    margin-left: 8px;
+}
+
+/* Button types */
+.primary-btn {
+    background: var(--piggy-pink);
+    color: white;
+}
+
+.effect-btn {
+    background: var(--piggy-yellow);
+    color: var(--text);
+}
+
+.transform-btn {
+    background: #f0f0f0;
+    color: var(--text);
+}
+
+.transform-btn.active {
+    background: var(--piggy-yellow);
+}
+
+/* Export button */
+.export-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--piggy-pink);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 4px;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    border: none;
+}
+
+/* Add touch feedback for iOS */
+@media (hover: none) {
+    input[type="range"].styled-slider:active::-webkit-slider-thumb {
+        transform: scale(1.1);
+    }
+    
+    .export-btn:active {
+        opacity: 0.9;
+    }
+}
+
+/* Add iOS-specific padding adjustments */
+@supports (-webkit-touch-callout: none) {
+    .sliders-group {
+        padding: 16px;
+        margin-bottom: env(safe-area-inset-bottom, 12px);
+    }
+    
+    .loop-controls {
+        margin-bottom: env(safe-area-inset-bottom, 8px);
+    }
+    
+    input[type="range"].styled-slider {
+        margin: 10px auto;
+        max-width: 100%;
+    }
+    
+    .export-btn {
+        margin-bottom: env(safe-area-inset-bottom, 20px);
+        padding: 12px 10px;
+    }
+}
+
+/* Ensure consistent button sizing on iOS */
+.export-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--piggy-pink);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 4px;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    border: none;
+}
+
+/* Add touch feedback for iOS */
+@media (hover: none) {
+    input[type="range"].styled-slider:active::-webkit-slider-thumb {
+        transform: scale(1.1);
+    }
+    
+    .export-btn:active {
+        opacity: 0.9;
+    }
+}
+
+.format-group {
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+}
+
+.format-group h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.format-group button {
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* Add platform-specific styling */
+.format-group[data-recommended="true"] {
+    border: 2px solid var(--piggy-pink);
+}
+
+.format-group[data-recommended="true"] h4::after {
+    content: " (Recommended)";
+    color: var(--piggy-pink);
+    font-weight: normal;
+}
+
+.start-frame-controls {
+    margin-bottom: 12px;
+    display: none; /* Hidden by default, shown when video is loaded */
+}
+
+.start-frame-controls input[type="range"] {
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#start-frame-value {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.8;
+}
+ 

@@ -1,0 +1,185 @@
+:root {
+    --piggy-pink: #ff9ec6;
+    --piggy-pink-dark: #ff7eb3;
+    --piggy-yellow: #ffd75e;
+    --text: #333333;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    color: var(--text);
+    position: relative;
+    overflow: hidden;
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.center-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    z-index: 1;
+    text-align: center;
+}
+
+.main-link {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.main-link:hover {
+    transform: scale(1.02);
+}
+
+.piggy-gif {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+}
+
+.logo {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 160px;
+    width: 90%;
+    z-index: 3;
+}
+
+@media (max-width: 600px) {
+    .piggy-gif {
+        max-width: 120px;
+    }
+    
+    .logo {
+        max-width: 100px;
+    }
+} 
+
+.tap-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+    z-index: 2;
+} 
+
+.tool-preview {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.tool-preview .piggy-gif {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+.tool-preview .logo {
+    position: relative;
+    max-width: 300px;
+    width: 80%;
+    margin-top: -40px;
+    z-index: 2;
+} 
+
+.social-links {
+    position: relative;
+    margin-top: 60px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.social-links a:hover {
+    opacity: 0.8;
+}
+
+.copy-address {
+    cursor: pointer;
+}
+
+.copy-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .piggy-gif {
+        max-width: 120px;
+    }
+    
+    .logo {
+        max-width: 100px;
+    }
+    
+    .social-links {
+        margin-top: 50px;
+        font-size: 12px;
+    }
+} 
